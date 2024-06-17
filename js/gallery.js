@@ -65,5 +65,51 @@ const images = [
     },
   ];
 
-  console.log(basiclightbox);
+  const list = document.querySelector(".gallery");
+  list.addEventListener("click", handlerClick)
+  list.insertAdjacentHTML("afterbegin", createMarkup(images));
+  
+  function handlerClick(evt) {
+    evt.preventDefault();
+    if (evt.currentTarget === evt.target) {
+      return;
+    }
     
+
+
+const parent = evt.target.closest(".gallery-item");
+const img = parent.querySelector(".gallery-image");
+
+const modalImg = img.dataset.source;
+const imgDescription = img.alt;
+console.log(modalImg);
+
+const instance = basicLightbox.create(
+    `<div class="modal">
+        <img
+          src="${modalImg}"
+          alt="${imgDescription}"
+        />
+    </div>`
+  );
+
+  instance.show();
+}
+
+function createMarkup(arrow) {
+  return arrow
+    .map(
+      ({ preview, original, description }) =>
+        `<li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img
+          class="gallery-image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+        />
+      </a>
+    </li>`
+    )
+    .join("");
+}
